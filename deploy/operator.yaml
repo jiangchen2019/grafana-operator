@@ -15,18 +15,16 @@ spec:
       serviceAccountName: grafana-operator
       containers:
         - name: grafana-operator
-          image: cp.stg.icr.io/cp/om/grafana-operator:6.6
+          image: quay.io/integreatly/grafana-operator:latest
           args:
-            - "--grafana-image=cp.stg.icr.io/cp/om/origin-grafana"
-            - "--grafana-image-tag=latest"
-            - "--grafana-plugins-init-container-image=cp.stg.icr.io/cp/om/origin-grafana"
-            - "--grafana-plugins-init-container-tag=0.0.2"
-            - "--image-pull-secret=new-entitled-registry"
+            - '--grafana-image=quay.io/openshift/origin-grafana'
+            - '--grafana-image-tag=4.2'
+            - '--image-pull-secret=entitled-registry'
           ports:
-            - containerPort: 60000
-              name: metrics
+          - containerPort: 60000
+            name: metrics
           command:
-            - grafana-operator
+          - grafana-operator
           imagePullPolicy: Always
           readinessProbe:
             exec:
