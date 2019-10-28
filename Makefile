@@ -1,9 +1,9 @@
-ORG?=integreatly
+ORG?=om
 NAMESPACE=grafana
 PROJECT=grafana-operator
-REG=quay.io
+REG=stg.icr.io/cp
 SHELL=/bin/bash
-TAG?=latest
+TAG?=6.6
 PKG=github.com/integr8ly/grafana-operator
 COMPILE_TARGET=./tmp/_output/bin/$(PROJECT)
 

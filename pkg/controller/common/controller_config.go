@@ -47,6 +47,8 @@ const (
 	DefaultLogLevel                 = "info"
 	SecretsMountDir                 = "/etc/grafana-secrets/"
 	ConfigMapsMountDir              = "/etc/grafana-configmaps/"
+	ConfigImagePullSecret           = "image.pull.secret"
+	ImagePullSecret                 = ""
 )
 
 type ControllerConfig struct {
