@@ -4,6 +4,10 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"os"
+	"runtime"
+	"strings"
+
 	"github.com/integr8ly/grafana-operator/pkg/apis"
 	"github.com/integr8ly/grafana-operator/pkg/controller"
 	"github.com/integr8ly/grafana-operator/pkg/controller/common"
@@ -15,13 +19,10 @@ import (
 	sdkVersion "github.com/operator-framework/operator-sdk/version"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"k8s.io/client-go/rest"
-	"os"
-	"runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	logf "sigs.k8s.io/controller-runtime/pkg/runtime/log"
 	"sigs.k8s.io/controller-runtime/pkg/runtime/signals"
-	"strings"
 )
 
 var log = logf.Log.WithName("cmd")
@@ -32,6 +33,7 @@ var flagPluginsInitContainerTag string
 var flagPodLabelValue string
 var flagNamespaces string
 var scanAll bool
+var flagImagePullSecret string
 
 func printVersion() {
 	log.Info(fmt.Sprintf("Go Version: %s", runtime.Version()))
@@ -49,6 +51,7 @@ func init() {
 	flagset.StringVar(&flagPodLabelValue, "pod-label-value", common.PodLabelDefaultValue, "Overrides the default value of the app label")
 	flagset.StringVar(&flagNamespaces, "namespaces", "", "Namespaces to scope the interaction of the Grafana operator. Mutually exclusive with --scan-all")
 	flagset.BoolVar(&scanAll, "scan-all", false, "Scans all namespaces for dashboards")
+	flagset.StringVar(&flagImagePullSecret, "image-pull-secret", "", "secret to pull grafana image")
 	flagset.Parse(os.Args[1:])
 }
 
@@ -123,6 +126,7 @@ func main() {
 	controllerConfig.AddConfigItem(common.ConfigPodLabelValue, flagPodLabelValue)
 	controllerConfig.AddConfigItem(common.ConfigOperatorNamespace, namespace)
 	controllerConfig.AddConfigItem(common.ConfigDashboardLabelSelector, "")
+	controllerConfig.AddConfigItem(common.ConfigImagePullSecret, flagImagePullSecret)
 
 	// Get the namespaces to scan for dashboards
 	// It's either the same namespace as the controller's or it's all namespaces if the

@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	v1 "k8s.io/api/core/v1"
 	"os"
 	"strings"
 	"text/template"
+
+	v1 "k8s.io/api/core/v1"
 
 	"github.com/integr8ly/grafana-operator/pkg/controller/common"
 
@@ -52,6 +53,7 @@ type GrafanaParameters struct {
 	PluginsInitContainerTag         string
 	PodLabelValue                   string
 	Replicas                        int
+	ImagePullSecret                 string
 }
 
 // TemplateHelper is the deployment helper object
@@ -138,6 +140,7 @@ func newTemplateHelper(cr *integreatly.Grafana) *TemplateHelper {
 		PluginsInitContainerTag:         controllerConfig.GetConfigString(common.ConfigPluginsInitContainerTag, common.PluginsInitContainerTag),
 		PodLabelValue:                   controllerConfig.GetConfigString(common.ConfigPodLabelValue, common.PodLabelDefaultValue),
 		Replicas:                        cr.Spec.InitialReplicas,
+		ImagePullSecret:                 controllerConfig.GetConfigString(common.ConfigImagePullSecret, common.ImagePullSecret),
 	}
 
 	templatePath := os.Getenv("TEMPLATE_PATH")
